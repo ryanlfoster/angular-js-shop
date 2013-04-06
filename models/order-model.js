@@ -5,7 +5,8 @@ var Sequelize = require("sequelize");
 
 var Order = sequelize.define('Order', {
     total_sum: Sequelize.FLOAT,
-    time: Sequelize.DATE,
+    createTime: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
+    finishTime: Sequelize.DATE,
     status: Sequelize.INTEGER
 });
 

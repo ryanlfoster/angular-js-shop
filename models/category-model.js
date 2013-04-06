@@ -5,7 +5,7 @@ var Sequelize = require("sequelize");
 
 var Category = sequelize.define('Category', {
     name     :{ type:Sequelize.STRING, defaultValue:""},
-    description     :{ type:Sequelize.TEXT, defaultValue:""}
+    description     :{ type:Sequelize.TEXT}
 });
 
 module.exports = Category;

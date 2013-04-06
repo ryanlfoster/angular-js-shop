@@ -4,9 +4,12 @@
 var Sequelize = require("sequelize");
 
 var Basket = sequelize.define('Basket', {
-    quantity: Sequelize.INTEGER,
-    price: Sequelize.INTEGER,
     status: Sequelize.INTEGER
 });
+
+Basket.Status = {
+  IN_PROCESS : 1,
+  IN_ORDER : 2
+};
 
 module.exports = Basket;

@@ -1,5 +1,7 @@
-/*global Passport:true, User:true, i18n:true, Picture:true */
-exports.setup = function(app){
+var db = require('./database');
+var fs = require('fs');
+
+exports.setup = function (app) {
     "use strict";
 
     var SITE_DOMAIN = 'http://js-shop.mortiy.net';
@@ -18,12 +20,12 @@ exports.setup = function(app){
     });
 
     passport.deserializeUser(function (id, done) {
-        User.find(id).success(function (user) {
+        db.models.User.find(id).success(function (user) {
 
             if (user === null) {
                 return done(i18n.__("Пользователь не найден."), null);
             }
-            Picture.find(user.PictureId).success(function (picture) {
+            db.models.Image.find(user.ImageId).success(function (picture) {
                 var userData = {};
                 if (user) {
                     userData = user.values;
@@ -41,9 +43,9 @@ exports.setup = function(app){
     passport.userByToken = function (accessToken, refreshToken, profile, done) {
         var providerId = Passport.Provider[profile.provider];
         console.log(profile);
-        Passport.find({ where: {providerId: providerId, passportId: profile.id}}).success(function (userPassport) {
+        db.models.Passport.find({ where: {providerId: providerId, passportId: profile.id}}).success(function (userPassport) {
             if (userPassport === null) {
-                User.create({
+                db.models.User.create({
                     name: profile.name ? profile.name.givenName : profile.displayName,
                     surname: profile.name ? profile.name.familyName : "",
                     login: profile.username,
@@ -54,7 +56,7 @@ exports.setup = function(app){
                         // Создаём папку для фотографий пользователя:
                         fs.mkdir('./public/pictures/' + user.id);
 
-                        Passport.create({
+                        db.models.Passport.create({
                             providerId: providerId,
                             passportId: profile.id,
                             userId: user.id
@@ -63,7 +65,7 @@ exports.setup = function(app){
                             });
                     });
             } else {
-                User.find(userPassport.userId).success(function (user) {
+                db.models.User.find(userPassport.userId).success(function (user) {
                     return done("", user.values);
                 });
             }

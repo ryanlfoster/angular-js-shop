@@ -8,9 +8,7 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     i18n = require('i18n'),
-    fs = require('fs'),
     util = require('util');
-
 
 i18n.configure({
     locales: ['ru_RU', 'uk_UA', 'us_EN'],
@@ -19,19 +17,19 @@ i18n.configure({
     debug: false
 });
 
-var app = express();
+var database = require('./controllers/database');
+var passport = require('./controllers/passport');
 
-['database', 'passport'].map(function(controllerName){
-    var controller = require('./controllers/' + controllerName);
-    global[controllerName] = controller.setup(app);
-});
+var app = express();
 
 global.app = app;
 
-// all environments:
-app.configure('all', function () {
+app.set('port', process.env.PORT || 3000);
 
-    app.set('port', process.env.PORT || 3000);
+// region Express Configuration
+app.configure('', function () {
+
+
     app.set('views', __dirname + '/views');
     app.set("view engine", "hjs");
     app.set('view options', { layout: false });
@@ -52,10 +50,11 @@ app.configure('all', function () {
     var COOKIES_SECRET = '9y526Ta9M7Mm24X10lUIfqaTGY5RGzty';
 
     app.use(express.logger('dev'));
-    app.use(express.bodyParser({ uploadDir: '/tmp/jsshop' }));
+    app.use(express.bodyParser({ uploadDir: 'tmp/jsshop' }));
     app.use(express.cookieParser(COOKIES_SECRET));
     app.use(express.cookieSession({ secret: COOKIES_SECRET }));
     app.use(passport.initialize());
+    app.use(database.initialize());
     app.use(passport.session());
     app.use(express.methodOverride());
     app.use(express.compress());
@@ -77,7 +76,6 @@ app.configure('all', function () {
     });
 });
 
-
 app.configure('development', function () {
     app.use(express.errorHandler());
 });
@@ -90,25 +88,13 @@ app.configure('production', function () {
     });
 });
 
+// endregion
 
-// all environments
-app.set('views', __dirname + '/views');
-app.set('view engine', 'hjs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(require('less-middleware')({ src: __dirname + '/public' }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-// development only
-if ('development' === app.get('env')) {
-    app.use(express.errorHandler());
-}
-
+// region Express Routes
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+// endregion
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

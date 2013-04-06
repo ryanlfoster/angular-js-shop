@@ -1,7 +1,8 @@
-Sequelize = require("sequelize");
+/*global sequelize:true */
+"use strict";
 
-var Image = sequelize.define('Image', {
+var Sequelize = require("sequelize");
+
+module.exports = sequelize.define('Image', {
     path: Sequelize.STRING
 });
-
-module.exports = Image;
