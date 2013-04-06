@@ -17,17 +17,15 @@ i18n.configure({
     debug: false
 });
 
-var database = require('./controllers/database');
-var passport = require('./controllers/passport');
-
 var app = express();
-
 global.app = app;
+
+
 
 app.set('port', process.env.PORT || 3000);
 
 // region Express Configuration
-app.configure('', function () {
+app.configure(function () {
 
 
     app.set('views', __dirname + '/views');
@@ -38,7 +36,7 @@ app.configure('', function () {
 
     app.use(require('less-middleware')({
         force: true,
-        prefix: '/stylesheets',
+        prefix: '/css',
         dest: __dirname + '/public/css',
         src: __dirname + '/public/less',
         compress: true
@@ -53,9 +51,6 @@ app.configure('', function () {
     app.use(express.bodyParser({ uploadDir: 'tmp/jsshop' }));
     app.use(express.cookieParser(COOKIES_SECRET));
     app.use(express.cookieSession({ secret: COOKIES_SECRET }));
-    app.use(passport.initialize());
-    app.use(database.initialize());
-    app.use(passport.session());
     app.use(express.methodOverride());
     app.use(express.compress());
     app.use(app.router);
@@ -91,8 +86,22 @@ app.configure('production', function () {
 // endregion
 
 // region Express Routes
+
+
+var controllers = {
+    database : require('./controllers/database'),
+    passport : require('./controllers/passport'),
+    products : require('./controllers/products'),
+    user : require('./controllers/user')
+};
+
+for(var controllerName in controllers){
+    if(controllers.hasOwnProperty(controllerName)){
+       controllers[controllerName].setup(app);
+    }
+}
+
 app.get('/', routes.index);
-app.get('/users', user.list);
 
 // endregion
 

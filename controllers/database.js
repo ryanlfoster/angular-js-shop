@@ -9,9 +9,10 @@ var sequelize = new Sequelize('jsshop', 'u_jsshop', 'j55h0p', {
     pool: { maxConnections: 5, maxIdleTime: 30}
 });
 
+
 global.sequelize = sequelize;
 
-// Models:
+// region Loading models
 var User = require("../models/user-model"),
     Passport = require("../models/passport-model"),
     Image = require("../models/image-model"),
@@ -23,7 +24,9 @@ var User = require("../models/user-model"),
     Basket = require("../models/basket-model"),
     BasketItem = require("../models/basket-item-model"),
     Order = require("../models/order-model");
+// endregion
 
+// region Relations definition
 Address
     .hasMany(Order);
 
@@ -63,22 +66,33 @@ User
     .hasMany(Comment)
     .belongsTo(Image);
 
-exports.initialize = function(callback){
-    sequelize.sync({force: true}).success(function(){
-        callback();
+// endregion
+
+
+var initialize = function (callback) {
+    sequelize.sync({force: true}).success(function () {
+        if(typeof(callback) === "function"){
+            callback();
+        }
     });
 };
 
-exports.models = {
-    User: User,
-    Passport: Passport,
-    Image: Image,
-    Category: Category,
-    Product: Product,
-    Property: Property,
-    Address: Address,
-    Comment: Comment,
-    Basket: Basket,
-    BasketItem: BasketItem,
-    Order: Order
+exports.setup = function(app){
+    //app.use(initialize);
 };
+
+
+global.database = {
+    models: {
+        User: User,
+        Passport: Passport,
+        Image: Image,
+        Category: Category,
+        Product: Product,
+        Property: Property,
+        Address: Address,
+        Comment: Comment,
+        Basket: Basket,
+        BasketItem: BasketItem,
+        Order: Order
+    }};

@@ -152,5 +152,86 @@ exports.setup = function (app) {
         }
     ));
 
+    app.configure(function(){
+        app.use(passport.initialize());
+        app.use(passport.session());
+    });
+
+    // Passport:
+
+    app.get('/logout', function (req, res) {
+        req.session = null;
+        res.redirect('/');
+    });
+
+    app.get('/login', function (req, res) {
+        res.render('login');
+    });
+
+    app.post('/auth/local',
+        passport.authenticate('local', { successRedirect: '/',
+            failureRedirect: '/login'
+        })
+    );
+
+    app.get('/auth/google',
+        passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }),
+        function (req, res) {
+        });
+
+    app.get('/auth/google/callback',
+        passport.authenticate('google', { failureRedirect: '/login' }),
+        function (req, res) {
+            res.redirect('/');
+        });
+
+    app.get('/auth/facebook',
+        passport.authenticate('facebook'),
+        function (req, res) {
+        });
+
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', { failureRedirect: '/login' }),
+        function (req, res) {
+            res.redirect('/');
+        });
+
+    app.get('/auth/twitter',
+        passport.authenticate('twitter'),
+        function (req, res) {
+        });
+
+    app.get('/auth/twitter/callback',
+        passport.authenticate('twitter', { failureRedirect: '/login' }),
+        function (req, res) {
+            res.redirect('/');
+        });
+
+    app.get('/auth/odnoklassniki',
+        passport.authenticate('odnoklassniki'),
+        function (req, res) {
+        });
+
+    app.get('/auth/odnoklassniki/callback',
+        passport.authenticate('odnoklassniki', { failureRedirect: '/login' }),
+        function (req, res) {
+            res.redirect('/');
+        })
+
+    app.get('/auth/vkontakte',
+        passport.authenticate('vkontakte'),
+        function (req, res) {
+        });
+
+    app.get('/auth/vkontakte/callback',
+        passport.authenticate('vkontakte', { failureRedirect: '/login' }),
+        function (req, res) {
+            // Successful authentication, redirect home.
+            res.redirect('/');
+        });
+    app.get('/auth/user', function (req, res) {
+        res.send(req.session.passport);
+    });
+
     return passport;
 };
