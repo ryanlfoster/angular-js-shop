@@ -1,0 +1,78 @@
+@fontColor : #eeeeee;
+
+@import 'mixins.less';
+
+body {
+    background-color: #eee;
+    color: #262626;
+}
+
+
+#header {
+    @mainColor: #76A600;
+    color: #ffffff;
+    background-color: @mainColor;
+    border-left: 2px solid lighten(@mainColor, 5%);
+    border-right: 2px solid darken(@mainColor, 10%);
+
+    h1 {
+        padding: 10px 0px;
+        text-align: center;
+        font-family: 'Marmelad', sans-serif;
+    }
+}
+
+#footer {
+    color: #ccc;
+    text-align: center;
+}
+
+
+#container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+
+/****************************
+          Новости
+****************************/
+
+#news-container {
+    @mainColor : #d9d5cd;
+    background-color: @mainColor;
+    border-left: 2px solid lighten(@mainColor, 5%);
+    border-right: 2px solid darken(@mainColor, 10%);
+
+    .news-piece {
+        border-bottom: 1px solid #e8dfb8;
+        .transition(background-color, 500ms);
+        &:hover {
+            background-color: lighten(@mainColor, 10%);
+        }
+
+        .news-image {
+            padding: 10px;
+        }
+
+        .news-details {
+            padding: 10px;
+        }
+
+
+    }
+    .news-actions {
+        text-align: right;
+    }
+}
+
+#news-details-container {
+    h1 {
+        color: grey;
+    }
+}
+
+#user-container {
+    background-color: #c6ffa1;
+}
+

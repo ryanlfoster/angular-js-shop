@@ -1,0 +1,21 @@
+<div id="news-container" class="row-fluid">
+    <div class="news-piece row-fluid clearfix" ng-repeat="news in allNews">
+        <div class="span3">
+            <div class="news-image">
+                <img src="http://lorempixel.com/200/140/?{{news.id}}"/>
+            </div>
+        </div>
+        <div class="span9">
+            <div class="news-details">
+                <h3 class="news-title">{{news.title}}</h3>
+
+                <p class="news-description">{{news.description}}</p>
+
+                <div class="news-actions">
+                    <a href="#/news/{{news.id}}" class="btn">Читати далі</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
