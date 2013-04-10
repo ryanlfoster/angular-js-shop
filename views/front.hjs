@@ -1,0 +1,27 @@
+<!-- Categories Tabs -->
+<div id="categories-tabs-container">
+    <ul id="categories-tabs">
+        {{#topCategories}}
+            <li>
+                <a title="{{name}}" href="/category/{{id}}/products">{{name}}</a>
+            </li>
+        {{/topCategories}}
+    </ul>
+</div>
+
+<!-- Promo Sections -->
+<div id="promo-container"></div>
+
+<!-- Categories & Subcategories list -->
+<div id="categories-list-container">
+    {{#topCategories}}
+        <h3><a title="{{name}}" href="/category/{{id}}">{{name}}</a></h3>
+        <ul>
+            {{#subCategories}}
+                <li>
+                    <a title="{{name}}" href="/category/{{id}}/products">{{name}}</a>
+                </li>
+            {{/subCategories}}
+        </ul>
+    {{/topCategories}}
+</div>

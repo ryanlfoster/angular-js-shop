@@ -10,7 +10,8 @@ var User = sequelize.define('User', {
     lastname: Sequelize.STRING,
     gender: { type: Sequelize.STRING, defaultValue: 'male' },
     locale: { type: Sequelize.STRING, defaultValue: 'ru_RU' },
-    birthDate: Sequelize.DATE
+    birthDate: Sequelize.DATE,
+    state : Sequelize.ENUM('guest', 'new', 'activated')
 });
 
 

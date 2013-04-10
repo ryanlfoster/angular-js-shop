@@ -1,0 +1,49 @@
+#top-bar-container {
+    background-color: @topBarColor;
+}
+
+#top-bar {
+    overflow: auto;
+    padding: 5px 5px;
+    width: @wrapperWidth;
+    margin: 0 auto;
+    margin-bottom: 10px;
+
+    ul {
+        margin-bottom: 0;
+        li {
+            display: inline-block;
+            margin-right: 0.5em;
+            a {
+                color: #eee;
+                text-decoration: underline;
+
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    #mobile-version-container {
+        float: left;
+        a {color: #ffff00;}
+    }
+
+    #top-links {
+        float: left;
+    }
+
+    #account-info {
+        float: right;
+    }
+
+    #basket-container {
+        float: right;
+        color: greenyellow;
+        a {
+            color: #fff;
+            text-decoration: underline;
+        }
+    }
+}

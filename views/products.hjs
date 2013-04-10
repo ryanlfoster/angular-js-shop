@@ -1,0 +1,14 @@
+<div id="filter-container"></div>
+<div id="products-container">
+    {{#products}}
+        <div class="product">
+            <h4>{{name}}</h4>
+            <p>{{description}}</p>
+            <div class="price">{{price}}</div>
+        </div>
+    {{/products}}
+</div>
+<div id="container" class="container-fluid" ng-controller="ProductsController">
+
+
+</div>

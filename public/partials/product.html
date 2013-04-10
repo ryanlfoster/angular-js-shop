@@ -1,0 +1,17 @@
+<div id="products-container" class="row-fluid">
+    <div class="product-piece clearfix" ng-repeat="product in allProducts">
+        <div class="p-image">
+            <img src="http://lorempixel.com/200/140/?{{news.id}}"/>
+        </div>
+        <div class="p-title">
+            <h3>{{news.title}}</h3>
+        </div>
+        <div class="p-description">
+            <p>{{news.description}}</p>
+        </div>
+        <div class="p-actions">
+            <a href="#/products/{{product.id}}" class="btn">Читати далі</a>
+        </div>
+    </div>
+</div>
+

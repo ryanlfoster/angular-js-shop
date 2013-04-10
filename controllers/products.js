@@ -1,7 +1,9 @@
 "use strict";
 
-exports.setup = function(app){
-    app.get('/product/:id', function(res, req){
+exports.routesSetup = function(app, callback){
+    app.get('/product/:id', function(req, res){
         database.models.Product.find;
     });
+
+    callback();
 };

@@ -77,8 +77,9 @@ var initialize = function (callback) {
     });
 };
 
-exports.setup = function(app){
-    //app.use(initialize);
+exports.routesSetup = function(app, callback){
+    //initialize(callback);
+    callback();
 };
 
 

@@ -1,11 +1,11 @@
 /*global angular:true, _:true */
 
-var newsApp;
+var shopApp;
 
 (function () {
     "use strict";
 
-    newsApp = angular.module('newsApp', []).
+    shopApp = angular.module('shopApp', []).
         config(['$routeProvider', function ($route) {
             $route.
                 when('/news', {
@@ -21,25 +21,41 @@ var newsApp;
                 otherwise({redirectTo: '/news'});
         }]);
 
-    newsApp.service("NewsService", ['$http', '$q', function ($http, $q) {
+    shopApp.service("CategoriesService", ['$http', '$q', function ($http, $q) {
 
-        var _this = this;
-        var defer = $q.defer();
+    }]);
 
-        $http.get('/data/news.json').success(function (newsData) {
+    shopApp.service("BasketService", ['$http', '$q', function ($http, $q) {
+        this.products = {};
 
-            _this.getNews = function (id) {
-                if (id) {
-                    return _.findWhere(newsData, { "id": id});
-                } else {
-                    return newsData;
-                }
-            };
+        this.addProduct = function(productId){
+//            if(!this.products[productId]){
+//                this.products[productId] = 1;
+//            } else {
+//                this.products[productId]++;
+//            }
+            $http.get('/basket/add/' + productId, function(basketInfo){
+                basketInfo;
+            });
 
-            defer.resolve(_this);
-        });
+        };
 
-        return defer.promise;
+        return this;
+    }]);
+
+    shopApp.service("ProductsService", ['$http', '$q', 'BasketService', function ($http, $q, basketService) {
+
+        this.basket = basketService;
+
+        this.getProducts = function (categoryId) {
+            var defer = $q.defer();
+            $http.get('/category/' + categoryId + '/products', function(productsData){
+                defer.resolve(productsData);
+            });
+            return defer.promise;
+        };
+
+        return this;
 
     }]);
 

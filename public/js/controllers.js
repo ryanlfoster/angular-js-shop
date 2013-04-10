@@ -1,20 +1,12 @@
-/*global newsApp:true, _:true */
+/*global shopApp:true, _:true */
 
 (function (app) {
     "use strict";
 
-    app.controller("NewsController", ['$scope', 'NewsService',
-        function (scope, service) {
-            scope.allNews = service.getNews();
-        }
-    ]);
+    app.controller("ProductsController", ['$scope', 'ProductsService', 'BasketService', function(scope, productsService, basketService){
+        scope.allProducts = productsService.getProducts();
+        scope.basket = basketService;
+    }]);
 
-    app.controller("NewsDetailsController", ['$scope', '$routeParams', 'NewsService',
-        function (scope, params, service) {
-            var newsId = parseInt(params.id, 10);
-            scope.news = service.getNews(newsId);
-        }
-    ]);
-
-}(newsApp));
+}(shopApp));
 

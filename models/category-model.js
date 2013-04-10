@@ -8,4 +8,5 @@ var Category = sequelize.define('Category', {
     description     :{ type:Sequelize.TEXT}
 });
 
+
 module.exports = Category;
