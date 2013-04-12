@@ -48,7 +48,7 @@ passport.deserializeUser(function (id, done) {
 
 passport.userByToken = function (accessToken, refreshToken, profile, done) {
     var providerId = global.database.Passport.Provider[profile.provider];
-    console.log(profile);
+
     global.database.models.Passport.find({ where: {providerId: providerId, passportId: profile.id}}).success(function (userPassport) {
         if (userPassport === null) {
             global.database.models.User.create({

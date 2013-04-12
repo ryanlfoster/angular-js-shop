@@ -1,0 +1,35 @@
+<div class="row-fluid">
+    <div class="span3">
+        <div id="filter-container">
+            &nbsp;
+        </div>
+    </div>
+    <div class="span9">
+        <div class="row-fluid">
+            <div id="breadcrumbs" class="span12">
+                {{& breadcrumbs }}
+            </div>
+        </div>
+        <div id="products-container">
+            {{#products}}
+                <div class="product row-fluid">
+                    <div class="span2">
+                        <div class="p-image">
+                            <img src="http://lorempixel.com/100/100/?{{id}}"/>
+                        </div>
+                    </div>
+                    <div class="span10">
+                        <div class="p-name"><a href="{{url}}">{{name}}</a></div>
+                        <div class="p-description">
+                            {{description}}
+                            <a href="{{url}}">Details &rarr;</a>
+                        </div>
+                        <div class="p-price">$ {{price}}</div>
+                    </div>
+                </div>
+            {{/products}}
+        </div>
+
+    </div>
+
+</div>

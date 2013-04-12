@@ -8,6 +8,7 @@ var sequelize = new Sequelize('jsshop', 'u_jsshop', 'j55h0p', {
     define: { timestamps: false },
     pool: { maxConnections: 5, maxIdleTime: 30}
 });
+var util = require('util');
 
 
 global.sequelize = sequelize;
@@ -40,6 +41,7 @@ BasketItem
 Category
     .hasMany(Property)
     .hasMany(Product)
+    .hasOne(Category, {as: 'Parent', foreignKey: "ParentId", useJunctionTable: false})
     .belongsTo(Image);
 
 Comment.hasMany(Comment, {as: 'Answer', foreignKey: 'ParentId', useJunctionTable: false});
@@ -49,7 +51,7 @@ Image
 
 Product
     .hasMany(Property)
-    .hasMany(Category)
+    .belongsTo(Category)
     .hasMany(Comment)
     .hasMany(Image)
     .hasOne(BasketItem);
@@ -71,15 +73,61 @@ User
 
 var initialize = function (callback) {
     sequelize.sync({force: true}).success(function () {
-        if(typeof(callback) === "function"){
-            callback();
+
+        var chainer = new Sequelize.Utils.QueryChainer();
+        var categories = ["Phones", "Fruits", "Furniture", "Household", "Books"];
+        var products = {
+            Phones : ["HTC One", "Apple iPhone 5", "Samsung Galaxy SIII", "Sony Xperia"],
+            Fruits : ["Apple", "Apricot", "Avocado", "Banana", "Breadfruit", "Bilberry", "Blackberry", "Blackcurrant", "Blueberry", "Currant", "Cherry", "Cherimoya", "Clementine", "Cloudberry", "Coconut", "Date", "Damson", "Dragonfruit", "Durian", "Eggplant", "Elderberry", "Feijoa", "Fig", "Gooseberry", "Grape", "Grapefruit", "Guava", "Huckleberry", "Honeydew", "Jackfruit", "Jettamelon", "Jambul", "Jujube", "Kiwi", "fruit", "Kumquat", "Legume", "Lemon", "Lime", "Loquat", "Lychee", "Mandarine", "Mango"],
+            Furniture : ["Chair", "Table", "Bed", "Sofa", "Ottoman", "Bench", "Mattress", "Jukebox", "Korsi", "Bookcase", "Safe"],
+            Household : ["Iron", "Clock", "Brush", "Refrigerator", "Microwave", "Dishwasher", "Scissors", "Wisk", "Salt and pepper set", "Vacuum cleaner"],
+            Books : ["Pippi Longstocking", "Pitter Pen", "Harry Potter", "Lord of the Rings", "Perl Book", "A Tale of Two Cities", "The Little Prince", "The Hobbit", "And Then There Were None", "The Lion, the Witch and the Wardrobe", "The Da Vinci Code"]
+        };
+
+        for (var i = 0; i < categories.length; i++) {
+            var categoryId = i + 1;
+            var categoryName = categories[i];
+            chainer.add(
+                sequelize.query(util.format(
+                    "INSERT INTO categories (id, name, description, ParentId) VALUES(%d, '%s', '%s', %d)",
+                    categoryId, categoryName, "Random categorydescription", 0
+                ))
+            );
+            var productsNames = products[categoryName];
+            for(var k = 1; k < 10; k++){
+                var productName = productsNames[Math.floor(Math.random() * productsNames.length)];
+                chainer.add(
+                    sequelize.query(util.format(
+                        "INSERT INTO products (name, description, price, CategoryId) VALUES('%s', '%s', %d, %d)",
+                        productName + " " + k, "Random \""+productName+"\" description", 50 + Math.floor(Math.random() * 2350), categoryId
+                    ))
+                );
+            }
         }
+
+        for (var j = 0; j < 5; j++) {
+            chainer.add(
+                sequelize.query(util.format(
+                    "INSERT INTO users (firstname, lastname) VALUES('%s', '%s')",
+                    "Oleksandr", "Sidko"
+                ))
+            );
+        }
+
+        chainer.runSerially()
+            .success(function () {
+                callback();
+            })
+            .error(function (errors) {
+                callback(errors);
+            });
+
     });
 };
 
-exports.routesSetup = function(app, callback){
-    //initialize(callback);
-    callback();
+exports.routesSetup = function (app, callback) {
+    initialize(callback);
+    //callback();
 };
 
 

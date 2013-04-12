@@ -2,6 +2,8 @@
 
 var async = require('async');
 
+var Loader = require('./loader');
+
 exports.routesSetup = function (app, callback) {
     app.get("/", function (req, res) {
 

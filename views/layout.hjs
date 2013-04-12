@@ -81,7 +81,7 @@
         <div id="categories-tabs-container">
             <ul id="categories-tabs">
                 {{#topCategories}}
-                    <li>
+                    <li {{#isActive}}class="active"{{/isActive}}>
                         <a title="{{name}}" href="/category/{{id}}/products">{{name}}</a>
                     </li>
                 {{/topCategories}}
