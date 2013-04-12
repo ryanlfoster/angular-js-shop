@@ -77,7 +77,18 @@
             </div>
         </div>
         <div id="currency-rates-container"></div>
+        <!-- Categories Tabs -->
+        <div id="categories-tabs-container">
+            <ul id="categories-tabs">
+                {{#topCategories}}
+                    <li>
+                        <a title="{{name}}" href="/category/{{id}}/products">{{name}}</a>
+                    </li>
+                {{/topCategories}}
+            </ul>
+        </div>
     </div>
+
 </div>
 <div id="body-container">
     {{& body }}

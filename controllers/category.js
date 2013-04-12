@@ -13,15 +13,31 @@ exports.routesSetup = function (app, callback) {
     app.get("/category/:categoryId/products", function (req, res) {
         var categoryId = parseInt(req.params.categoryId, 10);
 
+        Loader.get(req, ['categories', 'basket'], function (err, loaders) {
 
-        global.sequelize.query(
-                'SELECT p.id, p.name, p.description, p.price FROM products p ' +
-                    'LEFT JOIN CategoriesProducts cp ON(p.id = cp.ProductId)' +
-                    'WHERE cp.CategoryId = ' + categoryId).success(function (products) {
-            res.render('products', {
-                products: products
-            });
+            global.sequelize.query(
+                    'SELECT p.id, p.name, p.description, p.price FROM products p ' +
+                        'LEFT JOIN CategoriesProducts cp ON(p.id = cp.ProductId)' +
+                        'WHERE cp.CategoryId = ' + categoryId).success(function (products) {
+                    app.render('products', {
+                        products: products
+                    }, function (err, html) {
+                        res.render('layout', {
+                            body: html,
+                            title: 'JS Shop',
+                            description: 'Express',
+                            keywords: '',
+                            topCategories: loaders.categories,
+                            basketInfo: loaders.basket
+                        });
+                    });
+                });
+
+
         });
+
+
+
     });
 
     callback();

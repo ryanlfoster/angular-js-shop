@@ -81,6 +81,7 @@ app.configure('production', function () {
 var controllers = {
     database : require('./controllers/database'),
     passport : require('./controllers/passport'),
+    loader : require('./controllers/loader'),
     user : require('./controllers/user'),
     basket : require('./controllers/basket'),
     products : require('./controllers/products'),

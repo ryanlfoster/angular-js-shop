@@ -1,10 +1,15 @@
 <div id="filter-container"></div>
 <div id="products-container">
     {{#products}}
-        <div class="product">
-            <h4>{{name}}</h4>
-            <p>{{description}}</p>
-            <div class="price">{{price}}</div>
+        <div class="product row-fluid">
+            <div class="span4">
+                <div class="p-image"></div>
+            </div>
+            <div class="span8">
+                <div class="p-name"><a href="/product/{{id}}">{{name}}</a></div>
+                <div class="p-description">{{description}}</div>
+                <div class="p-price">{{price}}</div>
+            </div>
         </div>
     {{/products}}
 </div>

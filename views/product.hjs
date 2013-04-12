@@ -1,0 +1,47 @@
+<div class="row-fluid">
+    <div class="span3">
+        <div id="catalog">
+            <h3>Catalog</h3>
+        </div>
+    </div>
+    <div class="span9">
+        <div id="product-container">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h2 class="p-name">{{product.name}}</h2>
+                    <hr/>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="p-image">
+                        <img src="http://lorempixel.com/160/320/" />
+                    </div>
+                    <div class="p-album">
+                        <img src="http://lorempixel.com/32/32/" />
+                        <img src="http://lorempixel.com/32/32/" />
+                        <img src="http://lorempixel.com/32/32/" />
+                        <img src="http://lorempixel.com/32/32/" />
+                    </div>
+                </div>
+                <div class="span7">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <div class="p-price-container">
+                                <div class="p-price-main">
+                                    {{ product.priceUah}} грн
+                                </div>
+                                <div class="p-price-ue">
+                                    $ {{product.price}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="span6"></div>
+                    </div>
+                    <p>{{product.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
