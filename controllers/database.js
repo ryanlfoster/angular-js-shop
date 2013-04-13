@@ -74,38 +74,59 @@ User
 var initialize = function (callback) {
     sequelize.sync({force: true}).success(function () {
 
+        var i, j, k;
+
         var chainer = new Sequelize.Utils.QueryChainer();
         var categories = ["Phones", "Fruits", "Furniture", "Household", "Books"];
         var products = {
-            Phones : ["HTC One", "Apple iPhone 5", "Samsung Galaxy SIII", "Sony Xperia"],
-            Fruits : ["Apple", "Apricot", "Avocado", "Banana", "Breadfruit", "Bilberry", "Blackberry", "Blackcurrant", "Blueberry", "Currant", "Cherry", "Cherimoya", "Clementine", "Cloudberry", "Coconut", "Date", "Damson", "Dragonfruit", "Durian", "Eggplant", "Elderberry", "Feijoa", "Fig", "Gooseberry", "Grape", "Grapefruit", "Guava", "Huckleberry", "Honeydew", "Jackfruit", "Jettamelon", "Jambul", "Jujube", "Kiwi", "fruit", "Kumquat", "Legume", "Lemon", "Lime", "Loquat", "Lychee", "Mandarine", "Mango"],
-            Furniture : ["Chair", "Table", "Bed", "Sofa", "Ottoman", "Bench", "Mattress", "Jukebox", "Korsi", "Bookcase", "Safe"],
-            Household : ["Iron", "Clock", "Brush", "Refrigerator", "Microwave", "Dishwasher", "Scissors", "Wisk", "Salt and pepper set", "Vacuum cleaner"],
-            Books : ["Pippi Longstocking", "Pitter Pen", "Harry Potter", "Lord of the Rings", "Perl Book", "A Tale of Two Cities", "The Little Prince", "The Hobbit", "And Then There Were None", "The Lion, the Witch and the Wardrobe", "The Da Vinci Code"]
+            Phones: ["HTC One", "Apple iPhone 5", "Samsung Galaxy SIII", "Sony Xperia"],
+            Fruits: ["Apple", "Apricot", "Avocado", "Banana", "Breadfruit", "Bilberry", "Blackberry", "Blackcurrant", "Blueberry", "Currant", "Cherry", "Cherimoya", "Clementine", "Cloudberry", "Coconut", "Date", "Damson", "Dragonfruit", "Durian", "Eggplant", "Elderberry", "Feijoa", "Fig", "Gooseberry", "Grape", "Grapefruit", "Guava", "Huckleberry", "Honeydew", "Jackfruit", "Jettamelon", "Jambul", "Jujube", "Kiwi", "fruit", "Kumquat", "Legume", "Lemon", "Lime", "Loquat", "Lychee", "Mandarine", "Mango"],
+            Furniture: ["Chair", "Table", "Bed", "Sofa", "Ottoman", "Bench", "Mattress", "Jukebox", "Korsi", "Bookcase", "Safe"],
+            Household: ["Iron", "Clock", "Brush", "Refrigerator", "Microwave", "Dishwasher", "Scissors", "Wisk", "Salt and pepper set", "Vacuum cleaner"],
+            Books: ["Pippi Longstocking", "Pitter Pen", "Harry Potter", "Lord of the Rings", "Perl Book", "A Tale of Two Cities", "The Little Prince", "The Hobbit", "And Then There Were None", "The Lion, the Witch and the Wardrobe", "The Da Vinci Code"]
         };
 
-        for (var i = 0; i < categories.length; i++) {
+        for (i = 0; i < categories.length; i++) {
             var categoryId = i + 1;
             var categoryName = categories[i];
+
+            // Create main categories:
             chainer.add(
                 sequelize.query(util.format(
                     "INSERT INTO categories (id, name, description, ParentId) VALUES(%d, '%s', '%s', %d)",
-                    categoryId, categoryName, "Random categorydescription", 0
+                    categoryId, categoryName, "Random category description", 0
                 ))
             );
+
+            var productCategories = [];
+
+            // Create subcategories categories:
+            for (j = 1; j <= 4; j++) {
+                var subcategoryId = categoryId * 10 + j;
+                chainer.add(
+                    sequelize.query(util.format(
+                        "INSERT INTO categories (id, name, description, ParentId) VALUES(%d, '%s', '%s', %d)",
+                        subcategoryId, "Sub " + categoryName + " " + j, "Random sub-category description", categoryId
+                    ))
+                );
+                productCategories.push(subcategoryId);
+            }
+
+
             var productsNames = products[categoryName];
-            for(var k = 1; k < 10; k++){
+            for (k = 1; k < 20; k++) {
                 var productName = productsNames[Math.floor(Math.random() * productsNames.length)];
+                var parentCategoryId = productCategories[Math.floor(Math.random() * productCategories.length)];
                 chainer.add(
                     sequelize.query(util.format(
                         "INSERT INTO products (name, description, price, CategoryId) VALUES('%s', '%s', %d, %d)",
-                        productName + " " + k, "Random \""+productName+"\" description", 50 + Math.floor(Math.random() * 2350), categoryId
+                        productName + " " + k, "Random \"" + productName + "\" description", 50 + Math.floor(Math.random() * 2350), parentCategoryId
                     ))
                 );
             }
         }
 
-        for (var j = 0; j < 5; j++) {
+        for (i = 0; i < 5; i++) {
             chainer.add(
                 sequelize.query(util.format(
                     "INSERT INTO users (firstname, lastname) VALUES('%s', '%s')",
@@ -126,8 +147,8 @@ var initialize = function (callback) {
 };
 
 exports.routesSetup = function (app, callback) {
-    initialize(callback);
-    //callback();
+    //initialize(callback);
+     callback();
 };
 
 

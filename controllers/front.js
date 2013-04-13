@@ -9,7 +9,7 @@ exports.routesSetup = function (app, callback) {
 
         Loader.get(req, ['categories', 'basket'], function(err, loaders){
             app.render('front', {
-
+                topCategories: loaders.categories
             }, function (err, html) {
                 res.render('layout', {
                     body: html,

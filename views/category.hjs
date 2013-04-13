@@ -10,6 +10,34 @@
                 {{& breadcrumbs }}
             </div>
         </div>
+        {{#category}}
+        <div class="row-fluid">
+            <div class="span12">
+                <h2 class="p-name">{{name}}</h2>
+                <hr/>
+            </div>
+        </div>
+        {{/category}}
+        <div id="categories-container">
+            {{#categories}}
+                <div class="product row-fluid">
+                    <div class="span2">
+                        <div class="p-image">
+                            <img src="http://lorempixel.com/100/100/?{{id}}"/>
+                        </div>
+                    </div>
+                    <div class="span10">
+                        <div class="p-name"><a href="/category/{{id}}">{{name}}</a></div>
+                        <div class="p-description">
+                            {{description}}
+                            <a href="/category/{{id}}">Details &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            {{/categories}}
+        </div>
+
+
         <div id="products-container">
             {{#products}}
                 <div class="product row-fluid">
@@ -29,7 +57,6 @@
                 </div>
             {{/products}}
         </div>
-
     </div>
 
 </div>

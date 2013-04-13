@@ -6,7 +6,8 @@ var Model = global.database.models;
 
 var Loaders = {
     categories : function (req, callback) {
-        Model.Category.findAll({}).success(function (categoriesData) {
+        Model.Category.findAll({ where : {ParentId : 0}}).success(function (categoriesData) {
+
             if(req.params.categoryId){
                 var categoryId = parseInt(req.params.categoryId, 10);
                 for(var i = 0, j = categoriesData.length; i < j; i++){
@@ -34,17 +35,26 @@ var Loaders = {
         });
     },
     breadcrumbs : function(req, callback){
-        console.log("Generating breadcrumbs for: " + req.route.path);
+
         var c = req.route.path.split("/")[1];
+
+        var breadcrumbs = ['<a href="/">JS Shop</a>'];
 
         if(c === "product"){
             var productId = parseInt(req.params.productId, 10);
             Model.Product.find(productId).success(function(product){
                 product.getCategory().success(function(category){
 
-                    var breadcrumbs = '<a href="/category/' + category.id + '/products">' + category.name + '</a>' +
-                        ' &rarr; ' + product.name;
-                    callback(null, breadcrumbs);
+                    Model.Category.getParents(category.id, function(parents){
+
+                        for(var i = 0, j = parents.length; i < j; i++){
+                            var parent = parents[i];
+                            breadcrumbs.push('<a href="/category/' + parent.id + '">' + parent.name + '</a>');
+                        }
+                        callback(null, breadcrumbs.join(" &rarr; "));
+                    });
+
+
                 });
 
             });
@@ -52,12 +62,16 @@ var Loaders = {
             var categoryId = parseInt(req.params.categoryId, 10);
             Model.Category.find(categoryId).success(function(category){
 
-                var breadcrumbs = "<h2>"+category.name+"</h2>";
-                callback(null, breadcrumbs);
+                Model.Category.getParents(category.id, function(parents){
 
+                    for(var i = 0, j = parents.length - 1; i < j; i++){
+                        var parent = parents[i];
+                        breadcrumbs.push('<a href="/category/' + parent.id + '">' + parent.name + '</a>');
+                    }
+                    callback(null, breadcrumbs.join(" &rarr; "));
+                });
             });
         }
-
     }
 };
 

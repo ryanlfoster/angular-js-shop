@@ -63,7 +63,7 @@
 <div id="header-container">
     <div id="header">
         <div id="logo-container">
-            <img src="http://lorempixel.com/200/100" width="200" height="100"/>
+            <a href="/"><img src="http://lorempixel.com/200/100" width="200" height="100"/></a>
         </div>
         <div id="first-action-container">
             <div id="phones-container">
@@ -82,7 +82,7 @@
             <ul id="categories-tabs">
                 {{#topCategories}}
                     <li {{#isActive}}class="active"{{/isActive}}>
-                        <a title="{{name}}" href="/category/{{id}}/products">{{name}}</a>
+                        <a title="{{name}}" href="/category/{{id}}">{{name}}</a>
                     </li>
                 {{/topCategories}}
             </ul>
